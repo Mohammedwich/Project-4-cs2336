@@ -1,0 +1,3 @@
+Mickey	0	invalid
+Mirage	11	valid
+Aztec	12	valid
