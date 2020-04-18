@@ -115,7 +115,8 @@ public class Main
 			lineReader.close();
 		} // done filling matrix
 		
-		ArrayList<Patrol> patrolList = new ArrayList<Patrol>();
+		
+		ArrayList<Patrol> patrolList = new ArrayList<Patrol>(); //will hold each patrol object so we can sort then write them to output
 		
 		while(routesReader.hasNextLine())
 		{
@@ -153,6 +154,7 @@ public class Main
 		planetsReader.close();
 		galaxyReader.close();
 		routesReader.close();
+		outputWriter.close();
 	} // main end
 	
 //*********************************************************************************8
