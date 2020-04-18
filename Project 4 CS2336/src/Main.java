@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ListIterator;
 import java.util.Scanner;
 
@@ -112,12 +113,40 @@ public class Main
 			adjacencyMatrix.add(neighborsList);
 			
 			lineReader.close();
+		} // done filling matrix
+		
+		ArrayList<Patrol> patrolList = new ArrayList<Patrol>();
+		
+		while(routesReader.hasNextLine())
+		{
+			ArrayList<String> thePath = new ArrayList<String>(); // will hold each pilot's path for processing
+			
+			String currentLine = routesReader.nextLine();
+			Scanner lineReader = new Scanner(currentLine);
+			
+			String pilotName = lineReader.next();
+			
+			while(lineReader.hasNext())
+			{
+				String thePlanet = lineReader.next();
+				thePath.add(thePlanet);
+			}
+			
+			boolean valid = checkPathValidity(adjacencyMatrix, galaxyList, thePath);
+			int weight = getPathWeight(adjacencyMatrix, galaxyList, thePath);
+			
+			Patrol currentPilot = new Patrol(pilotName, weight, valid);
+			
+			patrolList.add(currentPilot);
+			lineReader.close();
 		}
 		
+		Collections.sort(patrolList);
 		
-		
-		
-		
+		for(Patrol x : patrolList)
+		{
+			outputWriter.append(x.toString() + "\n");
+		}
 		
 		
 		inputReader.close();
@@ -200,7 +229,7 @@ public class Main
 	}
 	
 	// Class to hold data and compare for sorting purposes
-	public class Patrol implements Comparable<Patrol>
+	public static class Patrol implements Comparable<Patrol>
 	{
 		public String name;
 		public int weight;
@@ -263,6 +292,8 @@ public class Main
 			{
 				result = result + "invalid";
 			}
+			
+			return result;
 		}
 
 		
@@ -299,6 +330,6 @@ public class Main
 			}
 		}
 		
-		
+	}
 
 }
