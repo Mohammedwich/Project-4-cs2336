@@ -198,5 +198,107 @@ public class Main
 		
 		return result;		
 	}
+	
+	// Class to hold data and compare for sorting purposes
+	public class Patrol implements Comparable<Patrol>
+	{
+		public String name;
+		public int weight;
+		public boolean validity;
+		
+		public Patrol()
+		{
+			name = "";
+			weight = 0;
+			validity = false;
+		}
+		
+		public Patrol(String theName, int theWeight, boolean theValidity)
+		{
+			this();
+			name = theName;
+			weight = theWeight;
+			validity = theValidity;
+		}
+		
+		public String getName()
+		{
+			return name;
+		}
+
+		public void setName(String name)
+		{
+			this.name = name;
+		}
+
+		public int getWeight()
+		{
+			return weight;
+		}
+
+		public void setWeight(int weight)
+		{
+			this.weight = weight;
+		}
+
+		public boolean isValidity()
+		{
+			return validity;
+		}
+
+		public void setValidity(boolean validity)
+		{
+			this.validity = validity;
+		}
+
+		public String toString()
+		{
+			String result = name + "\t" + weight + "\t";
+			
+			if(validity == true)
+			{
+				result = result + "valid";
+			}
+			else
+			{
+				result = result + "invalid";
+			}
+		}
+
+		
+		//compare weights, if weights are equal compare names
+		@Override
+		public int compareTo(Patrol otherObject)
+		{
+			if(weight > otherObject.getWeight())
+			{
+				return 1;
+			}
+			else if(weight < otherObject.getWeight())
+			{
+				return -1;
+			}
+			else if(weight == otherObject.getWeight())
+			{
+				if(name.compareTo(otherObject.getName()) > 0)
+				{
+					return 1;
+				}
+				else if(name.compareTo(otherObject.getName()) < 0)
+				{
+					return -1;
+				}
+				else
+				{
+					return 0;
+				}
+			}
+			else
+			{
+				return 0;
+			}
+		}
+		
+		
 
 }
