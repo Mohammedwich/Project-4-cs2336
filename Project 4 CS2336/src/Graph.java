@@ -1,3 +1,5 @@
+//Mohammed Ahmed, msa190000
+
 import java.util.ArrayList;
 
 public class Graph
@@ -62,9 +64,16 @@ public class Graph
 			int currentPlanetIndex = planetsList.indexOf(currentPlanet);
 			int nextPlanetIndex = planetsList.indexOf(nextPlanet);
 			
+			//if the planets don't exist and indexOf returns -1
+			if(currentPlanetIndex < 0 || nextPlanetIndex < 0)
+			{
+				result = false;
+				break;
+			}
+			
 			int edgeWeight = adjacencyMatrix.get(currentPlanetIndex).get(nextPlanetIndex);
 			
-			if(edgeWeight == 0) // if there is no edge between the two, the path is invalid and we return false
+			if(edgeWeight == -1) // if there is no edge between the two, the path is invalid and we return false
 			{
 				result = false;
 				break;

@@ -8,13 +8,14 @@ import java.util.Collections;
 import java.util.Scanner;
 
 
+//This main works without a graph class
 //Each line in the galaxy file will contain a vertex and a list of edges with weights. example:  Name otherName,5 otherName2,3
 //Each line in the routes file will contain the pilot’s name followed by a list of planets. ex: Pilot planet1 planet2
 
-public class Main2
+public class SingleMain
 {
 
-	public static void main(String[] args) throws IOException
+	public static void mainnn(String[] args) throws IOException
 	{
 		String galaxyFileName;
 		String routesFileName;
@@ -42,7 +43,7 @@ public class Main2
 			return;
 		}
 		
-		File outputFile = new File("patrols2.txt");
+		File outputFile = new File("singlePatrols.txt");
 		
 		outputFile.createNewFile();
 		
@@ -113,7 +114,6 @@ public class Main2
 			lineReader.close();
 		} // done filling matrix
 		
-		Graph planetsGraph = new Graph(galaxyList, adjacencyMatrix);
 		
 		ArrayList<Patrol> patrolList = new ArrayList<Patrol>(); //will hold each patrol object so we can sort then write them to output
 		
@@ -132,8 +132,8 @@ public class Main2
 				thePath.add(thePlanet);
 			}
 			
-			boolean valid = planetsGraph.checkPathValidity(thePath);
-			int weight = planetsGraph.getPathWeight(thePath);
+			boolean valid = checkPathValidity(adjacencyMatrix, galaxyList, thePath);
+			int weight = getPathWeight(adjacencyMatrix, galaxyList, thePath);
 			
 			Patrol currentPilot = new Patrol(pilotName, weight, valid);
 			
@@ -157,7 +157,78 @@ public class Main2
 	} // main end
 	
 //*********************************************************************************8
-
+	public static boolean checkPathValidity(ArrayList<ArrayList<Integer>> theMatrix, ArrayList<String> planetsList, ArrayList<String> thePath)
+	{
+		// deal with edge cases
+		if(thePath.size() == 0)
+		{
+			return false;
+		}
+		if(thePath.size() == 1)
+		{
+			String singlePlanet = thePath.get(0);
+			
+			if(planetsList.contains(singlePlanet) == true)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		//---------------------------------------------
+		
+		boolean result = true;
+		int pathSize = thePath.size();
+		
+		for(int i = 1; i < pathSize; ++i)
+		{
+			String currentPlanet = thePath.get(i-1);
+			String nextPlanet = thePath.get(i);
+			
+			int currentPlanetIndex = planetsList.indexOf(currentPlanet);
+			int nextPlanetIndex = planetsList.indexOf(nextPlanet);
+			
+			int edgeWeight = theMatrix.get(currentPlanetIndex).get(nextPlanetIndex);
+			
+			if(edgeWeight == 0) // if there is no edge between the two, the path is invalid and we return false
+			{
+				result = false;
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	public static int getPathWeight(ArrayList<ArrayList<Integer>> theMatrix, ArrayList<String> planetsList, ArrayList<String> thePath)
+	{
+		if( checkPathValidity(theMatrix, planetsList, thePath) == false )
+		{
+			return 0;
+		}
+		
+		int result = 0;
+		int pathSize = thePath.size();
+		
+		for(int i = 1; i < pathSize; ++i)
+		{
+			String currentPlanet = thePath.get(i-1);
+			String nextPlanet = thePath.get(i);
+			
+			int currentPlanetIndex = planetsList.indexOf(currentPlanet);
+			int nextPlanetIndex = planetsList.indexOf(nextPlanet);
+			
+			int edgeWeight = theMatrix.get(currentPlanetIndex).get(nextPlanetIndex);
+			
+			result += edgeWeight;			
+		}
+		
+		return result;		
+	}
+	
 	// Class to hold data and compare for sorting purposes
 	public static class Patrol implements Comparable<Patrol>
 	{
